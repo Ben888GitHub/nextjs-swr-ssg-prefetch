@@ -1,26 +1,26 @@
 import Head from 'next/head';
-
 import styles from '../styles/Home.module.css';
 import useSWR, { SWRConfig } from 'swr';
+import Link from 'next/link';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
-const API = 'https://api.github.com/repos/vercel/swr';
+const API = 'https://jsonplaceholder.typicode.com/posts';
 
 export async function getStaticProps() {
-	const repoInfo = await fetcher(API);
+	const posts = await fetcher(API);
 	return {
 		props: {
 			fallback: {
-				'https://api.github.com/repos/vercel/swr': repoInfo
+				'https://jsonplaceholder.typicode.com/posts': posts
 			}
 		}
 	};
 }
 
 function Posts() {
-	const { data, error } = useSWR(API, fetcher);
+	const { data: posts, error } = useSWR(API, fetcher);
 
-	data && console.log(data);
+	// data && console.log(data);
 
 	return (
 		<div className={styles.container}>
@@ -34,11 +34,14 @@ function Posts() {
 				<h1>
 					Welcome to <a href="https://nextjs.org">Next.js!</a>
 				</h1>
-				<h1>{data?.name}</h1>
-				<p>{data?.description}</p>
-				<strong>👀 {data?.subscribers_count}</strong>{' '}
-				<strong>✨ {data?.stargazers_count}</strong>{' '}
-				<strong>🍴 {data?.forks_count}</strong>
+				{posts?.map((post) => (
+					<div key={post?.id}>
+						<Link href={`/post/${post?.id}`}>
+							<h2>{post?.title}</h2>
+						</Link>
+						<p>{post?.body}</p>
+					</div>
+				))}
 			</main>
 		</div>
 	);
