@@ -6,7 +6,7 @@ import useSWR, { SWRConfig } from 'swr';
 const fetcher = (url) => fetch(url).then((res) => res.json());
 const API = 'https://api.github.com/repos/vercel/swr';
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 	const repoInfo = await fetcher(API);
 	return {
 		props: {
