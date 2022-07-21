@@ -23,7 +23,7 @@ export async function getStaticProps({ params }) {
 		props: {
 			page: params.page,
 			fallback: {
-				[`${API}?_page=${params.page}&_limit=${limit}`]: posts
+				'https://jsonplaceholder.typicode.com/posts': posts
 			}
 		}
 	};
